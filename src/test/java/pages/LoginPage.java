@@ -19,7 +19,7 @@ public class LoginPage {
     private static final String password_input_id = "password";
     private static final String continue_button_xpath = "//button[text()='Continue']";
     private static final String submit_button_xpath = "//button[text()='Submit']";
-    private static final String error_message_xpath = "//*[text()='User with provided username or email does not exist']";
+    private static final String error_message_css_selector = ".sc-gWHgXt";
 
     public static void getLoginPage() throws InterruptedException {
         WebDriverManager.chromedriver().setup();
@@ -68,9 +68,9 @@ public class LoginPage {
     public static String getUrl() {
         return driver.getCurrentUrl();
     }
-    public static String getEmailErrorMessage() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(error_message_xpath)));
-        return driver.findElement(By.xpath(error_message_xpath)).getText();
+    public static String getLoginErrorMessage() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(error_message_css_selector)));
+        return driver.findElement(By.cssSelector(error_message_css_selector)).getText();
     }
 
 
