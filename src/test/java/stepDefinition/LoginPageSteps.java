@@ -32,6 +32,12 @@ public class LoginPageSteps{
         getEmailAddress().sendKeys("ppregression@gbi.co");
     }
 
+    @When("User leaves email field empty")
+    public void userLeavesEmailFieldEmpty() throws InterruptedException {
+        getEmailAddress().sendKeys("");
+        getContinueButton().click();
+    }
+
     @And("User enters valid password")
     public void userEntersValidPassword() throws InterruptedException {
         getPassword().sendKeys("Test22@@");
@@ -62,6 +68,16 @@ public class LoginPageSteps{
         getPassword().sendKeys("InvalidPassword");
     }
 
+    @And("User leaves password field empty")
+    public void userLeavesPasswordFieldEmpty() throws InterruptedException {
+        getPassword();
+    }
+
+    @And("User leaves 2FA code field empty")
+    public void userLeavesFACodeFieldEmpty() throws InterruptedException {
+        getSubmitButton().click();
+    }
+
     @Then("User should be able to view portfolio page")
     public void user_should_be_able_to_view_portfolio_page() throws InterruptedException {
         waitPortfolioPageLoad();
@@ -79,8 +95,23 @@ public class LoginPageSteps{
         Assert.assertEquals(getLoginErrorMessage(), "Invalid username or password.", "Error message does not match");
     }
 
-    @Then("User should see an error message for invalid {int}FA code")
-    public void userShouldSeeAnErrorMessageForInvalidFACode(int arg0) {
+    @Then("User should see an error message for invalid 2FA code")
+    public void userShouldSeeAnErrorMessageForInvalid2FACode() {
         Assert.assertEquals(get2FAErrorMessage(), "The code you entered is invalid or has expired. Please check the code is correct or request a new one.", "Error message does not match");
+    }
+
+    @Then("User should see an error message for empty email field")
+    public void userShouldSeeAnErrorMessageForEmptyEmailField() {
+        Assert.assertEquals(getLoginErrorMessage(),"Email or username is required.", "Error message does not match");
+    }
+
+    @Then("User should see an error message for empty password field")
+    public void userShouldSeeAnErrorMessageForEmptyPasswordField() {
+        Assert.assertEquals(getLoginErrorMessage(),"Password is required.", "Error message does not match");
+    }
+
+    @Then("User should see an error message for empty 2FA code field")
+    public void userShouldSeeAnErrorMessageForEmptyFACodeField() {
+        Assert.assertEquals(getEmpty2FAErrorMessage(),"Security Code is required.", "Error message does not match");
     }
 }

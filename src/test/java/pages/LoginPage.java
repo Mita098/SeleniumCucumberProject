@@ -1,15 +1,9 @@
 package pages;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import Hooks.WebDriverHooks;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-
-import java.time.Duration;
 import java.util.List;
 
 
@@ -77,5 +71,10 @@ public class LoginPage extends WebDriverHooks {
         return spans.get(0).getText() + " " + spans.get(1).getText();
 
     }
+    public static String getEmpty2FAErrorMessage() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(error_message_wrong_2FA_xpath)));
+        return driver.findElement(By.xpath(error_message_wrong_2FA_xpath)).getText();
 
+
+    }
 }
