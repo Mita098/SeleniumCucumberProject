@@ -19,9 +19,9 @@ public class LoginPage {
     private static final String password_input_id = "password";
     private static final String continue_button_xpath = "//button[text()='Continue']";
     private static final String submit_button_xpath = "//button[text()='Submit']";
+    private static final String error_message_xpath = "//*[text()='User with provided username or email does not exist']";
 
-
-    public static void open_login_page() throws InterruptedException {
+    public static void getLoginPage() throws InterruptedException {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -30,40 +30,48 @@ public class LoginPage {
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(email_input_id)));
     }
 
-    public static void enter_valid_email_address() throws InterruptedException {
+    public static WebElement getEmailAddress() throws InterruptedException {
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(email_input_id)));
-        driver.findElement(By.id(email_input_id)).sendKeys("ppregression@gbi.co");
+        return driver.findElement(By.id(email_input_id));
     }
 
-    public static void click_continue_button() throws InterruptedException {
-        driver.findElement(By.xpath(continue_button_xpath)).click();
+    public static WebElement getContinueButton() throws InterruptedException {
+        return driver.findElement(By.xpath(continue_button_xpath));
     }
-    public static void enter_valid_password() throws InterruptedException {
+    public static WebElement getPassword() throws InterruptedException {
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(password_input_id)));
-        driver.findElement(By.id(password_input_id)).sendKeys("Test22@@");
+        return driver.findElement(By.id(password_input_id));
     }
 
+    public static void get2FACode(String code) throws InterruptedException {
+        if (code.length() != 6) {
+            throw new IllegalArgumentException("2FA code must be exactly 6 digits long");
+        }
 
-    public static void enter_valid_2FA_code() throws InterruptedException {
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='react-code-input']/input[1]")));
+
         for (int i = 1; i <= 6; i++) {
-
             String elementXPath = String.format("//div[@class='react-code-input']/input[%d]", i);
-
             WebElement inputElement = driver.findElement(By.xpath(elementXPath));
-
-            inputElement.sendKeys("0");
-
-            Thread.sleep(500);
+            inputElement.sendKeys(Character.toString(code.charAt(i - 1)));
         }
     }
-    public static void click_submit_button() throws InterruptedException {
-        driver.findElement(By.xpath(submit_button_xpath)).click();
-    }
-    public static void wait_portfolio_page_load() throws InterruptedException {
-        wait.until(ExpectedConditions.urlContains("/portfolio"));    }
 
-    public static boolean isUrlEndingWith(String suffix) {
-        return driver.getCurrentUrl().endsWith(suffix);
+    public static WebElement getSubmitButton() throws InterruptedException {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(submit_button_xpath)));
+        return driver.findElement(By.xpath(submit_button_xpath));
     }
+    public static void waitPortfolioPageLoad() throws InterruptedException {
+        wait.until(ExpectedConditions.urlContains("/portfolio"));
+    }
+
+    public static String getUrl() {
+        return driver.getCurrentUrl();
+    }
+    public static String getEmailErrorMessage() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(error_message_xpath)));
+        return driver.findElement(By.xpath(error_message_xpath)).getText();
+    }
+
+
 }
