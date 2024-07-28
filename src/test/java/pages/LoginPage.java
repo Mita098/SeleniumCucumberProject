@@ -14,7 +14,7 @@ import java.util.List;
 
 
 public class LoginPage extends WebDriverHooks {
-    private static WebDriverWait wait;
+
 
     private static final String email_input_id = "email";
     private static final String password_input_id = "password";
@@ -24,10 +24,6 @@ public class LoginPage extends WebDriverHooks {
     private static final String error_message_wrong_2FA_xpath = "//div[contains(@data-cy,'input-number')]/p";
 
     public static void getLoginPage() throws InterruptedException {
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        driver.get("https://gs-app-qa.bullioninternational.info/login-email");
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(email_input_id)));
     }
