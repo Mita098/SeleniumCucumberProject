@@ -2,17 +2,18 @@ package pages;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import Hooks.WebDriverHooks;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+
 import java.time.Duration;
+import java.util.List;
 
 
-public class LoginPage {
-
-    private static WebDriver driver;
+public class LoginPage extends WebDriverHooks {
     private static WebDriverWait wait;
 
     private static final String email_input_id = "email";
@@ -20,6 +21,7 @@ public class LoginPage {
     private static final String continue_button_xpath = "//button[text()='Continue']";
     private static final String submit_button_xpath = "//button[text()='Submit']";
     private static final String error_message_css_selector = ".sc-gWHgXt";
+    private static final String error_message_wrong_2FA_xpath = "//div[contains(@data-cy,'input-number')]/p";
 
     public static void getLoginPage() throws InterruptedException {
         WebDriverManager.chromedriver().setup();
@@ -72,6 +74,12 @@ public class LoginPage {
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(error_message_css_selector)));
         return driver.findElement(By.cssSelector(error_message_css_selector)).getText();
     }
+    public static String get2FAErrorMessage() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(error_message_wrong_2FA_xpath)));
+        WebElement pElement = driver.findElement(By.xpath(error_message_wrong_2FA_xpath));
+        List<WebElement> spans = pElement.findElements(By.tagName("span"));
+        return spans.get(0).getText() + " " + spans.get(1).getText();
 
+    }
 
 }

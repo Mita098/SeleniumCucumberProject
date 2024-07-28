@@ -6,9 +6,12 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.testng.Assert;
 
+
 import static pages.LoginPage.*;
 
-public class LoginPage {
+public class LoginPageSteps{
+
+
     @Given("User navigates to the Login page")
     public void user_navigates_to_the_login_page() throws InterruptedException {
         getLoginPage();
@@ -29,14 +32,19 @@ public class LoginPage {
         getEmailAddress().sendKeys("ppregression@gbi.co");
     }
 
-    @And("User enters password")
-    public void userEntersPassword() throws InterruptedException {
+    @And("User enters valid password")
+    public void userEntersValidPassword() throws InterruptedException {
         getPassword().sendKeys("Test22@@");
     }
 
     @And("User enters 2FA code")
     public void userEntersFACode() throws InterruptedException {
         get2FACode("000000");
+    }
+
+    @And("User enters invalid {int}FA code")
+    public void userEntersInvalidFACode(int arg0) throws InterruptedException {
+        get2FACode("111111");
     }
 
     @And("User clicks submit button")
@@ -69,5 +77,10 @@ public class LoginPage {
     @Then("User should see an error message for invalid password")
     public void userShouldSeeAnErrorMessageForInvalidPassword() {
         Assert.assertEquals(getLoginErrorMessage(), "Invalid username or password.", "Error message does not match");
+    }
+
+    @Then("User should see an error message for invalid {int}FA code")
+    public void userShouldSeeAnErrorMessageForInvalidFACode(int arg0) {
+        Assert.assertEquals(get2FAErrorMessage(), "The code you entered is invalid or has expired. Please check the code is correct or request a new one.", "Error message does not match");
     }
 }
